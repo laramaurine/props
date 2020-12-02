@@ -3,7 +3,8 @@ import './App.css';
 import Header from '../Header/Header.js'
 import Footer from '../Footer/Footer.js'
 import GuestList from '../GuestList/GuestList.js'
-
+import DinnerSupplies from '../DinnerSupplies/DinnerSupplies.js'
+import GuestForm from '../GuestForm/GuestForm.js'
 
 class App extends Component {
   state = {
@@ -14,88 +15,24 @@ class App extends Component {
     },
   }
 
-  handleChangeFor = (propertyName) => (event) => {
-    this.setState({
-      newGuest: {
-        ...this.state.newGuest,
-        [propertyName]: event.target.value,
-      }
-    });
-  }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    if (this.state.newGuest.name) {
-      this.setState({
-        guestList: [...this.state.guestList, this.state.newGuest],
-        newGuest: {
-          name: '',
-          kidsMeal: 'no',
-        },
-      });
-    } else {
-      alert('The new guest needs a name!');
-    }
-  }
+  
 
   render() {
     return (
       <div className="App">
         <Header />
+        <GuestForm 
+        newGuest={this.state.newGuest}
+        handleChangeFor={this.handleChangeFor}
+        handleSubmit={this.handleSubmit}
+        />
         
         <h2>Party Leader</h2>
         {this.state.guestList[0] && <h3>{this.state.guestList[0].name}</h3>}
-        <h2>Add a new guest</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name
-          </label>
-          <input
-            type="text"
-            placeholder="Name"
-            value={this.state.newGuest.name}
-            onChange={this.handleChangeFor('name')}
-          />
-          <div>
-            Would this guest like a kid's meal?
-            <div onChange={this.handleChangeFor('kidsMeal')}>
-              <div>
-                <label>
-                  <input
-                    type="radio"
-                    value="yes"
-                    name="kidsMeal"
-                  />
-                  Yes, this guest would like a Kid's Meal
-                </label>
-              </div>
-              <div>
-                <label>
-                  <input
-                    type="radio"
-                    value="no"
-                    defaultChecked
-                    name="kidsMeal"
-                  />
-                  No, this guest would not like a Kid's Meal
-                </label>
-              </div>
-            </div>
-          </div>
-          <button type="submit">Add Guest</button>
-        </form>
-       
+        
         <GuestList guests={this.state.guestList} />
-        <h2>Dinner Supplies</h2>
-        <div>
-          Spoons: {this.state.guestList.length * 2}
-        </div>
-        <div>
-          Forks: {this.state.guestList.length * 2}
-        </div>
-        <div>
-          Knives: {this.state.guestList.length * 2}
-        </div>
+        <DinnerSupplies count={this.state.guestList.length}/>
+        
         <Footer />
         
       </div>
